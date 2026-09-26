@@ -1,9 +1,9 @@
 using System.Text;
 using Ra.Common;
 using Xunit;
-using static Ra.TorClient.Http;
+using static Ra.Tor.Http;
 
-namespace Ra.TorClient.Tests;
+namespace Ra.Tor.Tests;
 
 public class HttpTests
 {

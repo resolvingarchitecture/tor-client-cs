@@ -1,6 +1,6 @@
 using System.Net.Sockets;
 
-namespace Ra.TorClient;
+namespace Ra.Tor;
 
 /// <summary>
 /// Detects a local Tor daemon.

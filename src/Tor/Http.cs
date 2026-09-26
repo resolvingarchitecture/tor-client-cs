@@ -1,6 +1,6 @@
 using Ra.Common;
 
-namespace Ra.TorClient;
+namespace Ra.Tor;
 
 /// <summary>
 /// A tiny HTTP/1.1 GET. HTTP only (no TLS) - HTTPS needs an

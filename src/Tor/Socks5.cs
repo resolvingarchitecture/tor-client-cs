@@ -2,7 +2,7 @@ using System.Net.Sockets;
 using System.Text;
 using Ra.Common;
 
-namespace Ra.TorClient;
+namespace Ra.Tor;
 
 /// <summary>
 /// Minimal SOCKS5 CONNECT client (no auth) - enough to tunnel an HTTP

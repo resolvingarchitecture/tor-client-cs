@@ -1,15 +1,15 @@
-# tor-client (C#) — Design
+# tor (C#) — Design
 
 A local-only Tor client: attaches to a Tor daemon already running on the
 host via its SOCKS proxy, for use as the Tor **protocol service** by a
 future `1m5-core-cs`. A C# port of the design in
-[`tor-client-java`](https://github.com/resolvingarchitecture/tor-client-java),
-trimmed to the same scope `tor-client-rust`'s *local* backend covers — same
-scope cut `tor-client-python`/`tor-client-ts`/`tor-client-cpp` already made.
+[`tor-java`](https://github.com/resolvingarchitecture/tor-java),
+trimmed to the same scope `tor-rust`'s *local* backend covers — same
+scope cut `tor-python`/`tor-ts`/`tor-cpp` already made.
 
 ## Where it sits
 
-    (future) 1m5-core-cs  ──wraps──►  Ra.TorClient.TorClient
+    (future) 1m5-core-cs  ──wraps──►  Ra.Tor.TorClient
                                               │
                                  SOCKS5 127.0.0.1:9050
                                  control 127.0.0.1:9051 (probe only)
@@ -21,12 +21,12 @@ scope cut `tor-client-python`/`tor-client-ts`/`tor-client-cpp` already made.
 Same reasoning as every other non-Rust port: Rust's `embedded` backend runs
 [Arti](https://gitlab.torproject.org/tpo/core/arti), the Tor Project's
 pure-**Rust** Tor implementation, in-process — there is no C# equivalent to
-embed. So, like `tor-client-java` *used to*, this client only ever attaches to
+embed. So, like `tor-java` *used to*, this client only ever attaches to
 a Tor instance **installed and running on the host**. No `Mode`/`Backend`
 split, no `ra.tor.mode`/`ra.tor.dataDir` config keys.
 
 **No C#/.NET Tor implementation is actually needed to fix this.**
-`tor-client-java` embeds Tor now by downloading and spawning the same official
+`tor-java` embeds Tor now by downloading and spawning the same official
 C `tor` binary Tor Project itself builds and signs, not by embedding an
 in-language reimplementation - `System.Diagnostics.Process` plus the BCL's own
 `HttpClient`/`SHA256`/`System.Formats.Tar` (the last available since .NET 7 -
@@ -45,9 +45,11 @@ inaccurate and this section should be rewritten, not just amended.
                        http:// only, no TLS
     TorClient         config, status, Start()/Stop()/Send()
 
-`Ra.TorClient` is both the namespace and the client's class name
-(`Ra.TorClient.TorClient`) — same pattern `service-bus-cs` already uses
-(`Ra.ServiceBus.ServiceBus`), not a naming mistake.
+The namespace is `Ra.Tor` (renamed 2026-09-26 from `Ra.TorClient` - dropping
+"Client" to match `tor-java`'s rename); the client class itself stays
+`TorClient` (`Ra.Tor.TorClient`), same shape `service-bus-cs`'s
+`Ra.ServiceBus.ServiceBus` uses where the class does share its enclosing
+namespace's former name.
 
 ## Message flow
 
@@ -101,7 +103,7 @@ embedded mode to select): `ra.tor.host`, `ra.tor.socksPort`,
 - **Blocking `Socket`, no listener-lifecycle gotcha.** `Socks5.RecvExact`
   loops a blocking `Socket.Receive` until it has `n` bytes or
   `Socket.ReceiveTimeout` throws — straightforward, like the C++ port and
-  unlike `tor-client-ts`'s `SocketReader`, which exists specifically to
+  unlike `tor-ts`'s `SocketReader`, which exists specifically to
   work around `node:net`'s non-blocking, event-driven stream API.
 - SOCKS5 + HTTP hand-rolled on `System.Net.Sockets.Socket` (no
   `HttpClient`/`SocksHttpHandler`), matching every other port's

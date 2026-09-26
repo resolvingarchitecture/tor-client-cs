@@ -2,7 +2,7 @@ using System.Net;
 using System.Net.Sockets;
 using Xunit;
 
-namespace Ra.TorClient.Tests;
+namespace Ra.Tor.Tests;
 
 public class DetectorTests
 {

@@ -5,7 +5,7 @@ using System.Text.Json.Nodes;
 using Ra.Common;
 using Xunit;
 
-namespace Ra.TorClient.Tests;
+namespace Ra.Tor.Tests;
 
 public class ClientTests
 {

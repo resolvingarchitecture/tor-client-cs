@@ -1,14 +1,14 @@
-# tor-client (C#)
+# tor (C#)
 
-A local-only Tor client for **1M5**: attaches to a Tor daemon already
+A local-only Tor client for **Resolving Architecture ecosystem**: attaches to a Tor daemon already
 running on this host — SOCKS5 proxy `127.0.0.1:9050`, control port
 `127.0.0.1:9051` (probed for readiness only).
 
-A C# port of [`tor-client-java`](https://github.com/resolvingarchitecture/tor-client-java);
-mirrors the *local* backend of [`tor-client-rust`](https://github.com/resolvingarchitecture/tor-client-rust)
+A C# port of [`tor-java`](https://github.com/resolvingarchitecture/tor-java);
+mirrors the *local* backend of [`tor-rust`](https://github.com/resolvingarchitecture/tor-rust)
 (no embedded backend — Arti is Rust-only, see `DESIGN.md`).
 
-**This local-daemon-only model is being retired.** `tor-client-java` no longer
+**This local-daemon-only model is being retired.** `tor-java` no longer
 attaches to a pre-existing Tor instance at all - it downloads the official Tor
 Project binary, verifies it, and spawns/owns it directly, so there is no
 fallback to some other already-running Tor anywhere in that library. This port
@@ -16,7 +16,7 @@ should adopt the same model; see "Embedded Tor (planned)" below and `TODO.md`.
 
 ## Embedded Tor (planned)
 
-Not implemented yet. The plan, matching `tor-client-java`'s current design -
+Not implemented yet. The plan, matching `tor-java`'s current design -
 and genuinely simpler here than in most other ports, since `net8.0`'s BCL
 already covers every primitive needed, including tar extraction:
 
@@ -28,7 +28,7 @@ already covers every primitive needed, including tar extraction:
    network alongside the download itself), and extract it with
    `System.Formats.Tar`'s `TarFile.ExtractToDirectory` combined with
    `System.IO.Compression.GZipStream` - both BCL since .NET 7, no need to
-   shell out to the system `tar` the way `tor-client-java` does.
+   shell out to the system `tar` the way `tor-java` does.
 2. Spawn it (`System.Diagnostics.Process`) with a generated `torrc`
    (`SocksPort auto`, `ControlPort auto`, real `CookieAuthentication 1`,
    `__OwningControllerProcess <our pid>`).
@@ -56,7 +56,7 @@ Then `systemctl start tor` (or `tor -f ~/.torrc`). Check:
 
 ```csharp
 using Ra.Common;
-using Ra.TorClient;
+using Ra.Tor;
 
 var client = new TorClient();                 // or new TorClient(config)
 if (client.Start())                            // false (cleanly) if Tor is unavailable

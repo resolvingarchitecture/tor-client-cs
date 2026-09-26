@@ -1,7 +1,7 @@
 using System.Text.Json.Nodes;
 using Ra.Common;
 
-namespace Ra.TorClient;
+namespace Ra.Tor;
 
 /// <summary>
 /// <c>TorClient</c> - the local-only Tor client. Ports <c>tor-client-rust</c>'s
